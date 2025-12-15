@@ -2,44 +2,51 @@ import { Injectable } from '@nestjs/common';
 import { Response } from 'express';
 import * as QRCode from 'qrcode';
 import PDFDocument from 'pdfkit';
+import * as path from 'path'; // Import path
 
 @Injectable()
 export class PdfGeneratorService {
   async generate(table: any, res: Response) {
-    // 1. Tạo QR dạng DataURL
+    // Đường dẫn đến file font. 
+    // process.cwd() trỏ về thư mục gốc của project khi chạy
+    const fontPath = path.join(process.cwd(), 'assets', 'fonts', 'Roboto-Regular.ttf');
+
     const qrDataUrl = await QRCode.toDataURL(table.qrToken);
 
-    // 2. Tạo PDF
     const doc = new PDFDocument({
       size: 'A4',
       margin: 50,
     });
 
-    // 3. Header response
+    // QUAN TRỌNG: Đăng ký font tiếng Việt
+    try {
+      doc.font(fontPath);
+    } catch (e) {
+      console.warn("Không tìm thấy font, sẽ dùng font mặc định (có thể lỗi font):", e.message);
+      // Fallback về font mặc định nếu không tìm thấy file, nhưng sẽ lỗi tiếng Việt
+    }
+
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader(
       'Content-Disposition',
       `attachment; filename=Table-${table.tableNumber}.pdf`,
     );
 
-    // 4. Pipe stream
     doc.pipe(res);
 
-    // 5. Vẽ nội dung PDF
+    // Sử dụng font đã đăng ký
     doc
       .fontSize(20)
-      .text(`Bàn số: ${table.tableNumber}`, {
+      .text(`Bàn số: ${table.tableNumber}`, { // Bây giờ tiếng Việt sẽ hiển thị đúng
         align: 'center',
       });
 
     doc.moveDown(1);
 
-    // Khung
     doc
       .rect(100, 150, 400, 400)
       .stroke();
 
-    // QR Image
     doc.image(qrDataUrl, 200, 200, {
       width: 200,
       height: 200,
@@ -50,7 +57,6 @@ export class PdfGeneratorService {
       .fontSize(12)
       .text(`Vị trí: ${table.location}`, { align: 'center' });
 
-    // 6. Kết thúc PDF
     doc.end();
   }
 }
