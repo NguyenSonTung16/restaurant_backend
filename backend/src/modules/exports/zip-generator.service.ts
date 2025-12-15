@@ -19,11 +19,13 @@ export class ZipGeneratorService {
     archive.pipe(res);
 
     for (const table of tables) {
-      const buffer = await QRCode.toBuffer(table.qrToken);
+      // Nếu qrToken null thì bỏ qua hoặc lấy id làm fallback
+      const content = table.qrToken || table.id;
 
-      archive.append(buffer, {
-        name: `Ban-${table.tableNumber}.png`,
-      });
+      // Đảm bảo await việc tạo buffer xong mới append
+      const buffer = await QRCode.toBuffer(content);
+
+      archive.append(buffer, { name: `Table-${table.tableNumber}.png` });
     }
 
     await archive.finalize();
