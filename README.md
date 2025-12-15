@@ -26,3 +26,20 @@ Hệ thống xoay quanh việc **số hóa quy trình gọi món tại bàn** th
 ### 1. Cài đặt dependencies
 ```bash
 npm install
+```
+
+##Cấu hình Font chữ (Quan trọng)Để file PDF hiển thị đúng tiếng Việt, bắt buộc phải có file font:Tạo thư mục: backend/assets/fonts/Tải file Roboto-Regular.ttf (hoặc font tiếng Việt bất kỳ) và đặt vào thư mục trên.Kiểm tra file nest-cli.json đã có cấu hình copy assets:
+"compilerOptions": {
+  "assets": ["assets/**/*"],
+  "watchAssets": true
+}
+🚀 Chạy ứng dụng
+# Chế độ development (hot-reload)
+npm run start:dev
+
+# Chế độ production
+npm run build
+npm run start:prod
+
+Server sẽ chạy tại: http://localhost:3000
+
