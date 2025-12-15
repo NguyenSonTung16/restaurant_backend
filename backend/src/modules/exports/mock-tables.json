@@ -1,0 +1,16 @@
+[
+  {
+    "id": "mock-uuid-1",
+    "tableNumber": "Bàn 01",
+    "capacity": 4,
+    "location": "Tầng 1",
+    "qrToken": "https://restaurant.com/menu?t=token_ban_1"
+  },
+  {
+    "id": "mock-uuid-2",
+    "tableNumber": "VIP 02",
+    "capacity": 10,
+    "location": "Phòng lạnh",
+    "qrToken": "https://restaurant.com/menu?t=token_ban_2"
+  }
+]
