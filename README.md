@@ -35,11 +35,13 @@ npm install
 }
 🚀 Chạy ứng dụng
 # Chế độ development (hot-reload)
+```bash
 npm run start:dev
-
+```
 # Chế độ production
+```bash
 npm run build
 npm run start:prod
-
+```
 Server sẽ chạy tại: http://localhost:3000
 
